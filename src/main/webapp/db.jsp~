@@ -1,0 +1,34 @@
+<%@ page language="java" import="java.sql.*"%>
+<html>
+<body>
+<%
+final String dbForName= "org.postgresql.Driver";
+Class.forName(dbForName);
+
+Connection connect=null;
+ResultSet resultSet=null;
+Statement statement=null;
+
+try{
+
+String url="jdbc:"+System.getenv().get("DATABASE_URL");
+
+int i=1;
+connect=DriverManager.getConnection(url);
+statement=connect.createStatement();
+resultSet=statement.executeQuery("select * from keyvalue");
+//writeResultSet(resultSet);
+while (resultSet.next()) {
+%>
+<%=resultSet.getString("name")%>
+<%
+}
+resultSet.close();
+statement.close();
+connect.close();
+}catch(Exception e){
+	System.out.println(e.getMessage());
+}
+%>
+</body>
+</html>
